@@ -76,7 +76,6 @@ public class MainActivity extends AppCompatActivity
     FirebaseAuth auth;
     FrameLayout fragMain;
     Fragment fragment;
-    FloatingActionButton fab;
 //    private ImageView imgAvatar;
     private View headerView;
     private TextView lblName;
@@ -86,6 +85,7 @@ public class MainActivity extends AppCompatActivity
     private User user;
     private String userId;
     List<AuthUI.IdpConfig> providers;
+    private FirebaseAuth.AuthStateListener authStateListener;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,15 +99,6 @@ public class MainActivity extends AppCompatActivity
 
         manager = Manager.getManager();
 
-        fab = (FloatingActionButton) findViewById(R.id.fabNewTransaction);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, ReceiptPhotoActivity.class);
-                startActivity(intent);
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -115,18 +106,20 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         auth = FirebaseAuth.getInstance();
-        final FirebaseUser currentUser = auth.getCurrentUser();
-        auth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+
+        authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (currentUser != null) {
-                    userId = currentUser.getUid();
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    userId = user.getUid();
                     loadData();
                 } else {
+                    userId = null;
                     signIn();
                 }
             }
-        });
+        };
 
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -144,10 +137,9 @@ public class MainActivity extends AppCompatActivity
             //Restore the fragment's instance
             fragment = getSupportFragmentManager().getFragment(savedInstanceState, "currentFragment");
             if (!(fragment instanceof DashboardFragment)) {
-                fab.hide();
             }
         } else {
-            fragment = new DashboardFragment();
+            fragment = new BudgetList();
         }
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -160,6 +152,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        auth.addAuthStateListener(authStateListener);
     }
 
     @Override
@@ -207,23 +200,19 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.navDashboard) {
-            if (!(fragment instanceof DashboardFragment)) {
-                fragment = new DashboardFragment();
-                fab.show();
-            }
-        } else if (id == R.id.navAddTransaction) {
-            Intent intent = new Intent(this, AddTransactionActivity.class);
+        if (id == R.id.navAddTransaction) {
+            Intent intent = new Intent(this, ReceiptPhotoActivity.class);
             startActivity(intent);
         } else if (id == R.id.navBudgets) {
-
+            if (!(fragment instanceof BudgetList)) {
+                fragment = new BudgetList();
+            }
         } else if (id == R.id.navTransactions) {
             if (!(fragment instanceof TransactionFragment)) {
                 fragment = new TransactionFragment();
-                fab.hide();
             }
         } else if (id == R.id.navLogout) {
-            AuthUI.getInstance().signOut(this);
+            signOut();
         }
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -235,6 +224,17 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
 
+    }
+
+    private void signOut() {
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    public void onComplete(@NonNull Task<Void> task) {
+                        startActivity(new Intent(MainActivity.this, MainActivity.class));
+                        finish();
+                    }
+                });
     }
 
     @Override
@@ -289,6 +289,8 @@ public class MainActivity extends AppCompatActivity
             ((TransactionFragment) fragment).updateData();
         } else if (fragment instanceof  DashboardFragment) {
             ((DashboardFragment) fragment).updateTopCats();
+        } else if (fragment instanceof BudgetList) {
+            ((BudgetList) fragment).updateData();
         }
     }
 

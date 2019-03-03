@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 public class Manager {
 
     private ArrayList<Transaction> transactions = new ArrayList<>();
+    private ArrayList<Budget> budgets = new ArrayList<>();
     private static Manager manager;
     private DataHandler dh;
     private User user;
@@ -23,6 +24,7 @@ public class Manager {
     private Manager() {
         dh = new DataHandler();
         firebaseDB = FirebaseFirestore.getInstance();
+
     }
 
     public static Manager getManager() {
@@ -37,6 +39,7 @@ public class Manager {
     public void setUser(User u) {
         this.user = u;
         setTransactions(u.getTransactions());
+        setBudgets(u.getBudgets());
     }
 
     public void setTransactions(ArrayList<Transaction> list) {
@@ -44,13 +47,26 @@ public class Manager {
     }
 
     public void saveUser(User u) {
+        budgets.add(new Budget(0, 0, 0));
+        budgets.add(new Budget(0, 1, 0));
+        budgets.add(new Budget(0, 2, 0));
+        budgets.add(new Budget(0, 3, 0));
+        budgets.add(new Budget(0, 4, 0));
+        budgets.add(new Budget(0, 5, 0));
+        u.setBudgets(budgets);
         dh.addUser(u);
     }
 
     public void addTransaction(Transaction transaction) {
         transaction.setId(dh.getTransactionId(user.getId()));
+        for (Budget budget : budgets) {
+            if (budget.getCategory() == transaction.getCategory()) {
+                budget.setCurrentAmount(budget.getCurrentAmount() + transaction.getTotal());
+            }
+        }
         transactions.add(transaction);
         user.setTransactions(transactions);
+        user.setBudgets(budgets);
         dh.addUser(user);
     }
 
@@ -92,5 +108,21 @@ public class Manager {
         dh.getUser(id, listener);
     }
 
+    public ArrayList<Budget> getBudgets() {
+        return budgets;
+    }
 
+    public void setBudgets(ArrayList<Budget> budgets) {
+        this.budgets = budgets;
+    }
+
+    public void updateBudget(Budget budget) {
+        for (int i = 0; i < budgets.size(); i++) {
+            if (budgets.get(i).getCategory() == budget.getCategory()) {
+                budgets.set(i, budget);
+                user.setBudgets(budgets);
+                dh.addUser(user);
+            }
+        }
+    }
 }

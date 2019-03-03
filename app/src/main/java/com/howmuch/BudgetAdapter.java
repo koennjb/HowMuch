@@ -21,19 +21,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class BudgetAdapter extends RecyclerView.Adapter<BudgetViewHolder> {
 
-    List<Transaction> transactions;
+    List<Budget> budgets;
     Context context;
     int lastPosition = -1;
-
-    public BudgetAdapter(List<Transaction> budgets, Context context) {
-        this.transactions = budgets;
+    private View view;
+    public BudgetAdapter(List<Budget> budgets, Context context) {
+        this.budgets = budgets;
         this.context = context;
     }
 
     @NonNull
     @Override
     public BudgetViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_transaction, parent, false);
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_budget, parent, false);
         BudgetViewHolder holder = new BudgetViewHolder(view);
         return holder;
     }
@@ -41,16 +41,24 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull BudgetViewHolder holder, int position) {
         //Use the provided View Holder on the onCreateViewHolder method to populate the current row on the RecyclerView
-        final Transaction transaction = transactions.get(position);
+        final Budget budget = budgets.get(position);
 
-        holder.lblBudgetListName.setText(transaction.getDescription());
+        holder.lblBudgetListName.setText(DataHandler.CATEGORIES[budget.getCategory()]);
         NumberFormat format = NumberFormat.getCurrencyInstance();
-        holder.lblBudgetListBudget.setText(format.format(transaction.getTotal()));
-
+        holder.lblBudgetListBudget.setText(format.format(budget.getBudgetAmount()));
+        holder.lblBudgetListCurrent.setText(format.format(budget.getCurrentAmount()));
         holder.cardBudget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Handle budget view.
+            }
+        });
+        holder.ibtnBudgetListEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, BudgetEditActivity.class);
+                intent.putExtra("categoryInt", budget.getCategory());
+                context.startActivity(intent);
             }
         });
 
@@ -65,6 +73,6 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetViewHolder> {
 
     @Override
     public int getItemCount() {
-        return 0;
+        return budgets.size();
     }
 }

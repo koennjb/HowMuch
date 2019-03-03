@@ -9,6 +9,7 @@ public class User {
     private String name;
     private String id;
     private ArrayList<Transaction> transactions;
+    private ArrayList<Budget> budgets = new ArrayList<>();
 
     public User(String email, String name, String id, ArrayList<Transaction> transactions) {
         this.email = email;
@@ -73,6 +74,14 @@ public class User {
 
     public void setTransactions(ArrayList<Transaction> transactions) {
         this.transactions = transactions;
+    }
+
+    public ArrayList<Budget> getBudgets() {
+        return budgets;
+    }
+
+    public void setBudgets(ArrayList<Budget> budgets) {
+        this.budgets = budgets;
     }
 
     @Override

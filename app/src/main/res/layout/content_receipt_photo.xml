@@ -22,12 +22,29 @@
         app:layout_constraintTop_toBottomOf="@+id/tilReceiptPhotoTotal" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilReceiptPhotoTotal"
-        android:layout_width="wrap_content"
+        android:id="@+id/tilNewTransactionDate"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
+        android:hint="Date"
+        app:layout_constraintEnd_toEndOf="@+id/tilReceiptPhotoTotal"
+        app:layout_constraintStart_toEndOf="@+id/prmtDollarSign"
+        app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtNewTransactionDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilReceiptPhotoTotal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
         android:hint="Total"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +52,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txtReceiptPhotoTotal"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -55,13 +72,11 @@
         android:id="@+id/tilReceiptPhotoDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginTop="16dp"
         android:hint="For"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
+        app:layout_constraintEnd_toEndOf="@+id/tilNewTransactionDate"
+        app:layout_constraintStart_toStartOf="@+id/tilNewTransactionDate"
+        app:layout_constraintTop_toBottomOf="@+id/tilNewTransactionDate">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txtReceiptPhotoDescription"

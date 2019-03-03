@@ -46,7 +46,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionViewHold
         holder.lblTransactionListName.setText(transaction.getDescription());
         NumberFormat format = NumberFormat.getCurrencyInstance();
         holder.getLblTransactionListAmount.setText(format.format(transaction.getTotal()));
-
+        holder.lblCategory.setText(DataHandler.CATEGORIES[transaction.getCategory()]);
         holder.cardTransaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

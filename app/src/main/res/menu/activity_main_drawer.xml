@@ -5,17 +5,13 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/navDashboard"
-            android:icon="@drawable/ic_home_black_24dp"
-            android:title="Dashboard" />
+            android:id="@+id/navBudgets"
+            android:icon="@drawable/ic_account_balance_wallet_black_24dp"
+            android:title="Budgets" />
         <item
             android:id="@+id/navAddTransaction"
             android:icon="@drawable/ic_add_black_24dp"
             android:title="Add Transaction" />
-        <item
-            android:id="@+id/navBudgets"
-            android:icon="@drawable/ic_account_balance_wallet_black_24dp"
-            android:title="Budgets" />
         <item
             android:id="@+id/navTransactions"
             android:icon="@drawable/ic_credit_card_black_24dp"

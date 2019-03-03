@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,7 +17,7 @@ public class BudgetViewHolder extends RecyclerView.ViewHolder {
     protected TextView lblBudgetListBudget;
     protected ImageButton ibtnBudgetListEdit;
 
-    public BudgetViewHolder(View view) {
+    public BudgetViewHolder(@NonNull View view) {
         super(view);
         cardBudget = view.findViewById(R.id.cardBudget);
         lblBudgetListName = view.findViewById(R.id.lblBudgetListName);

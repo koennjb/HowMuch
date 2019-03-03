@@ -23,7 +23,7 @@ public class BudgetList extends Fragment {
 
     private RecyclerView recBudgets;
     private Manager dm;
-    private List<Transaction> budgets = new ArrayList<>();
+    private List<Budget> budgets = new ArrayList<>();
     private View rootView;
     private BudgetAdapter adapter;
 
@@ -51,7 +51,7 @@ public class BudgetList extends Fragment {
     }
 
     public void updateData() {
-        budgets = dm.allTransactions();
+        budgets = dm.getBudgets();
         adapter = new BudgetAdapter(budgets, rootView.getContext());
         recBudgets.setAdapter(adapter);
     }

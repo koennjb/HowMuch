@@ -1,6 +1,7 @@
 package com.howmuch;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -19,6 +20,7 @@ import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -27,6 +29,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
 
 import java.io.File;
@@ -34,6 +37,7 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import androidx.annotation.NonNull;
@@ -41,8 +45,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 
-public class ReceiptPhotoActivity extends AppCompatActivity {
+public class ReceiptPhotoActivity extends AppCompatActivity  implements DatePickerDialog.OnDateSetListener {
 
+    private int year;
+    private int monthOfYear;
+    private int dayOfMonth;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private Bitmap imageBitmap;
     private String pictureImagePath = "";
@@ -53,6 +60,8 @@ public class ReceiptPhotoActivity extends AppCompatActivity {
     private Button btnRetake;
     private Spinner spnCategories;
     private Manager dm;
+    private TextInputEditText txtDate;
+    private DatePickerDialog datePicker;
 
     private TextRecogn txtRec;
 
@@ -82,6 +91,23 @@ public class ReceiptPhotoActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, DataHandler.CATEGORIES);
         spnCategories.setAdapter(adapter);
+
+        Calendar newDate = Calendar.getInstance();
+        year = newDate.get(Calendar.YEAR);
+        monthOfYear = newDate.get(Calendar.MONTH);
+        dayOfMonth = newDate.get(Calendar.DAY_OF_MONTH);
+        datePicker = new DatePickerDialog(
+                this, ReceiptPhotoActivity.this, year, monthOfYear, dayOfMonth);
+
+        txtDate = findViewById(R.id.txtNewTransactionDate);
+        txtDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) {
+                    datePicker.show();
+                }
+            }
+        });
 
     }
 
@@ -201,9 +227,20 @@ public class ReceiptPhotoActivity extends AppCompatActivity {
         transaction.setDescription(txtReceiptPhotoDescription.getText().toString());
         transaction.setTotal(Double.valueOf(txtReceiptPhotoTotal.getText().toString()));
         transaction.setCategory(spnCategories.getSelectedItemPosition());
+        String date = txtDate.getText().toString();
+
+        transaction.setDate(date);
         dm.addTransaction(transaction);
         Toast.makeText(this, "Added transaction!", Toast.LENGTH_SHORT).show();
         finish();
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        this.year = year;
+        this.monthOfYear = month;
+        this.dayOfMonth = dayOfMonth;
+        txtDate.setText((month + 1) +"/" +dayOfMonth + "/" + year);
     }
 }
 
