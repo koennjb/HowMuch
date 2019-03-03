@@ -22,6 +22,8 @@ import com.google.firebase.ml.vision.text.RecognizedLanguage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import androidx.annotation.NonNull;
 
@@ -74,64 +76,20 @@ public class TextRecogn {
         }
     }
 
-//    private ArrayList<String> parseIntsAndFloats(ArrayList<String> rawList) {
-//
-//        ArrayList<String> listBuffer = new ArrayList<String>();
-//
-//        Pattern pattern = Pattern.compile("[+-]?[0-9]*[.]?[0-9]+");
-//
-//        Matcher m = p.matcher(raw);
-//
-//        while (m.find()) {
-//            listBuffer.add(m.group());
-//        }
-//
-//        return listBuffer;
-//    }
+    private ArrayList<String> parseIntsAndFloats(String raw) {
+        raw = "dsadsad 37676.89  dadsda  $944.8421";
+        ArrayList<String> listBuffer = new ArrayList<String>();
 
+        Pattern pattern = Pattern.compile("[+-]?[0-9]*[.]?[0-9]+");
 
-//    public void textRecog(View view) {
-//
-//        Task<FirebaseVisionDocumentText> firebaseVisionDocumentTextTask = detector.processImage(image)
-//                .addOnSuccessListener(new OnSuccessListener<FirebaseVisionDocumentText>() {
-//                    @Override
-//                    public void onSuccess(FirebaseVisionDocumentText result) {
-//                        String resultText = result.getText();
-//                        for (FirebaseVisionDocumentText.Block block: result.getBlocks()) {
-//                            String blockText = block.getText();
-//                            Float blockConfidence = block.getConfidence();
-//                            List<RecognizedLanguage> blockRecognizedLanguages = block.getRecognizedLanguages();
-//                            Rect blockFrame = block.getBoundingBox();
-//                            for (FirebaseVisionDocumentText.Paragraph paragraph: block.getParagraphs()) {
-//                                String paragraphText = paragraph.getText();
-//                                Float paragraphConfidence = paragraph.getConfidence();
-//                                List<RecognizedLanguage> paragraphRecognizedLanguages = paragraph.getRecognizedLanguages();
-//                                Rect paragraphFrame = paragraph.getBoundingBox();
-//                                for (FirebaseVisionDocumentText.Word word: paragraph.getWords()) {
-//                                    String wordText = word.getText();
-//                                    Float wordConfidence = word.getConfidence();
-//                                    List<RecognizedLanguage> wordRecognizedLanguages = word.getRecognizedLanguages();
-//                                    Rect wordFrame = word.getBoundingBox();
-//                                }
-//                            }
-//                        }
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        // Task failed with an exception
-//                        // ...
-//                    }
-//                });
-//
-//
-//    }
-//
-//    protected string findTotal (string word) {
-//
-//        return "";
-//    }
+        Matcher m = pattern.matcher(raw);
 
+        while (m.find()) {
+            Log.d(TAG, m.group());
+            listBuffer.add(m.group());
+        }
+
+        return listBuffer;
+    }
 
 }
