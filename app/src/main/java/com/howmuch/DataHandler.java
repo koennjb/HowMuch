@@ -37,6 +37,10 @@ public class DataHandler {
         return new User(email, name, id, transactions);
     }
 
+    public void addUser(User u) {
+
+    }
+
 //    public String getTransactionId() {
 //        return
 //    }
