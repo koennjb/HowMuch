@@ -1,9 +1,5 @@
 package com.howmuch;
 
-import android.provider.ContactsContract;
-
-import java.util.Date;
-
 public class Transaction {
 
     private double total;

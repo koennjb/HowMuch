@@ -22,12 +22,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     FrameLayout fragMain;
     Fragment fragment;
     FloatingActionButton fab;
+
+    private Manager manager;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +65,9 @@ public class MainActivity extends AppCompatActivity
         if (savedInstanceState != null) {
             //Restore the fragment's instance
             fragment = getSupportFragmentManager().getFragment(savedInstanceState, "currentFragment");
+            if (!(fragment instanceof DashboardFragment)) {
+                fab.hide();
+            }
         } else {
             fragment = new DashboardFragment();
         }
@@ -68,6 +77,8 @@ public class MainActivity extends AppCompatActivity
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
         navigationView.getMenu().getItem(0).setChecked(true);
+
+        mAuth = FirebaseAuth.getInstance();
 
     }
 
@@ -116,7 +127,18 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.navAddTransaction) {
+        if (id == R.id.navDashboard) {
+            if (!(fragment instanceof DashboardFragment)) {
+                fragment = new DashboardFragment();
+                fab.show();
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.fragMain, fragment);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                ft.addToBackStack(null);
+                ft.commit();
+            }
+        }
+        else if (id == R.id.navAddTransaction) {
             Intent intent = new Intent(this, AddTransactionActivity.class);
             startActivity(intent);
         } else if (id == R.id.navBudgets) {
@@ -136,5 +158,16 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+
+
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        updateUI(currentUser);
+    }
+
 }
