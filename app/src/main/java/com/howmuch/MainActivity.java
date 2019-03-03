@@ -186,7 +186,6 @@ public class MainActivity extends AppCompatActivity
         if (currentUser != null) {
             userId = currentUser.getUid();
             updateUser();
-            manager.addTransaction(new Transaction("Test", 45.0, "12/2/2018", 0));
         } else {
             signIn();
         }

@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 
 public class Manager {
 
-    private ArrayList<Transaction> transactions;
+    private ArrayList<Transaction> transactions = new ArrayList<>();
     private static Manager manager;
     private DataHandler dh;
     private User user;
@@ -49,6 +49,8 @@ public class Manager {
 
     public void addTransaction(Transaction transaction) {
         transactions.add(transaction);
+        user.setTransactions(transactions);
+        dh.addUser(user);
     }
 
     public ArrayList<Transaction> allTransactions() {

@@ -4,7 +4,7 @@ public class Transaction {
 
     private double total;
     private String date;
-    private String category;
+    private int category;
     private String id;
     private String description;
 
@@ -24,7 +24,7 @@ public class Transaction {
         this.description = description;
         this.total = total;
         this.date = date;
-        this.category = DataHandler.CATEGORIES[category];
+        this.category = category;
     }
 
     public double getTotal() {
@@ -43,12 +43,12 @@ public class Transaction {
         this.date = date;
     }
 
-    public String getCategory() {
+    public int getCategory() {
         return category;
     }
 
     public void setCategory(int category) {
-        this.category = DataHandler.CATEGORIES[category];
+        this.category = category;
     }
 
     public String getDescription() {
