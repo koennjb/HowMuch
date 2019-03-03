@@ -1,7 +1,15 @@
 package com.howmuch;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+
+import androidx.annotation.NonNull;
 
 public class Manager {
 
@@ -10,8 +18,11 @@ public class Manager {
     private DataHandler dh;
     private User user;
 
+    private FirebaseFirestore firebaseDB;
+
     private Manager() {
         dh = new DataHandler();
+        firebaseDB = FirebaseFirestore.getInstance();
         user = dh.getUser();
         transactions = user.getTransactions();
     }
@@ -57,6 +68,15 @@ public class Manager {
                 transactions.remove(i);
             }
         }
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void loadUser(String id, OnCompleteListener<DocumentSnapshot> listener) {
+        DocumentReference docRef = firebaseDB.collection(DataHandler.USERS_COLLECTION_PATH).document(id);
+        docRef.get().addOnCompleteListener(listener);
     }
 
 
