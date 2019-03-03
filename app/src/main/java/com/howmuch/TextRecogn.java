@@ -33,8 +33,7 @@ public class TextRecogn {
     FirebaseVisionTextRecognizer detector;
     private final String TAG = "TextRec-Log";
 
-    public TextRecogn() {
-        Log.d(TAG, "Bitmap is null: " + (bitmap == null));
+    public TextRecogn(Bitmap bitmap) {
         image = FirebaseVisionImage.fromBitmap(bitmap);
         detector = FirebaseVision.getInstance()
                 .getCloudTextRecognizer();
@@ -55,8 +54,7 @@ public class TextRecogn {
                                 new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        // Task failed with an exception
-                                        // ...
+                                        Log.d(TAG, "Failed!!");
                                     }
                                 });
     }
