@@ -27,7 +27,6 @@ public class AddTransactionActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         txtDate = findViewById(R.id.txtNewTransactionDate);
