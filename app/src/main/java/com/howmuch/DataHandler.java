@@ -24,6 +24,11 @@ public class DataHandler {
     private Transaction transaction4 = new Transaction(707.99, "03/04/2019", 1);
     private ArrayList<Transaction> transactions;
 
+    //Actual Firebase stuff
+
+
+
+
     public DataHandler() {
         transactions = new ArrayList<Transaction>();
         user  = getUser();
