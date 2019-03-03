@@ -126,8 +126,8 @@ public class ReceiptPhotoActivity extends AppCompatActivity {
                         case ExifInterface.ORIENTATION_NORMAL:
                         default:
                             rotatedBitmap = imageBitmap;
-                            txtRec = new TextRecogn(rotatedBitmap);
                     }
+                    txtRec = new TextRecogn(rotatedBitmap);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
