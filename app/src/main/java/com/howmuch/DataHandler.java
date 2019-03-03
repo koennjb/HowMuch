@@ -26,6 +26,7 @@ public class DataHandler {
     public static final int OTHER = 5;
 
     public static final String USERS_COLLECTION_PATH = "users";
+    public static final String TRANSACTIONS_PATH = "transactions";
 
     private final String TAG = "DataHandler-Log";
 
@@ -34,10 +35,10 @@ public class DataHandler {
     private String name = "Bob Smith";
     private String id = "xyz123";
 
-    private Transaction transaction1 = new Transaction(200.45, "03/01/2019", 0);
-    private Transaction transaction2 = new Transaction(55.54, "03/02/2019", 1);
-    private Transaction transaction3 = new Transaction(45, "03/03/2019", 0);
-    private Transaction transaction4 = new Transaction(707.99, "03/04/2019", 1);
+    private Transaction transaction1 = new Transaction("Pizza",200.45, "03/01/2019", 0);
+    private Transaction transaction2 = new Transaction("New shorts",55.54, "03/02/2019", 1);
+    private Transaction transaction3 = new Transaction("Test title",45, "03/03/2019", 0);
+    private Transaction transaction4 = new Transaction("IDEK anymore",707.99, "03/04/2019", 1);
     private ArrayList<Transaction> transactions;
 
     //Actual Firebase stuff
@@ -49,13 +50,13 @@ public class DataHandler {
         db = FirebaseFirestore.getInstance();
         user = getUser();
         addUser(user);
-    }
-
-    public User getUser() {
         transactions.add(transaction1);
         transactions.add(transaction2);
         transactions.add(transaction3);
         transactions.add(transaction4);
+    }
+
+    public User getUser() {
         user = new User(email, name, id, transactions);
         return user;
     }

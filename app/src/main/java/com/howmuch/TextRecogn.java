@@ -35,8 +35,7 @@ public class TextRecogn {
     FirebaseVisionTextRecognizer detector;
     private final String TAG = "TextRec-Log";
 
-    public TextRecogn() {
-        Log.d(TAG, "Bitmap is null: " +  (bitmap == null));
+    public TextRecogn(Bitmap bitmap) {
         image = FirebaseVisionImage.fromBitmap(bitmap);
         detector = FirebaseVision.getInstance()
                 .getCloudTextRecognizer();
@@ -57,18 +56,18 @@ public class TextRecogn {
                                 new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        // Task failed with an exception
-                                        // ...
+                                        Log.d(TAG, "Failed!!");
                                     }
                                 });
     }
 
     public void success(FirebaseVisionText result) {
-        for (FirebaseVisionText.TextBlock block: result.getTextBlocks()) {
-            for (FirebaseVisionText.Line line: block.getLines()) {
-                for (FirebaseVisionText.Element element: line.getElements()) {
-                    String elementText = element.getText();
-                    Log.d(TAG, elementText);
+        ArrayList<String> string = new ArrayList<>();
+        for (FirebaseVisionText.TextBlock block : result.getTextBlocks()) {
+            for (FirebaseVisionText.Line line : block.getLines()) {
+                for (FirebaseVisionText.Element element : line.getElements()) {
+                    string.add(element.getText());
+                    Log.d(TAG, element.getText());
                 }
             }
         }
@@ -89,51 +88,5 @@ public class TextRecogn {
 
         return listBuffer;
     }
-
-
-//    public void textRecog(View view) {
-//
-//        Task<FirebaseVisionDocumentText> firebaseVisionDocumentTextTask = detector.processImage(image)
-//                .addOnSuccessListener(new OnSuccessListener<FirebaseVisionDocumentText>() {
-//                    @Override
-//                    public void onSuccess(FirebaseVisionDocumentText result) {
-//                        String resultText = result.getText();
-//                        for (FirebaseVisionDocumentText.Block block: result.getBlocks()) {
-//                            String blockText = block.getText();
-//                            Float blockConfidence = block.getConfidence();
-//                            List<RecognizedLanguage> blockRecognizedLanguages = block.getRecognizedLanguages();
-//                            Rect blockFrame = block.getBoundingBox();
-//                            for (FirebaseVisionDocumentText.Paragraph paragraph: block.getParagraphs()) {
-//                                String paragraphText = paragraph.getText();
-//                                Float paragraphConfidence = paragraph.getConfidence();
-//                                List<RecognizedLanguage> paragraphRecognizedLanguages = paragraph.getRecognizedLanguages();
-//                                Rect paragraphFrame = paragraph.getBoundingBox();
-//                                for (FirebaseVisionDocumentText.Word word: paragraph.getWords()) {
-//                                    String wordText = word.getText();
-//                                    Float wordConfidence = word.getConfidence();
-//                                    List<RecognizedLanguage> wordRecognizedLanguages = word.getRecognizedLanguages();
-//                                    Rect wordFrame = word.getBoundingBox();
-//                                }
-//                            }
-//                        }
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        // Task failed with an exception
-//                        // ...
-//                    }
-//                });
-//
-//
-//    }
-//
-//    protected string findTotal (string word) {
-//
-//        return "";
-//    }
-
-
 
 }
