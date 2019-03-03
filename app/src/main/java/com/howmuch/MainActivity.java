@@ -110,13 +110,19 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         auth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = auth.getCurrentUser();
-        if (currentUser != null) {
-            userId = currentUser.getUid();
-            loadData();
-        } else {
-            signIn();
-        }
+        final FirebaseUser currentUser = auth.getCurrentUser();
+        auth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (currentUser != null) {
+                    userId = currentUser.getUid();
+                    loadData();
+                } else {
+                    signIn();
+                }
+            }
+        });
+
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -202,6 +208,8 @@ public class MainActivity extends AppCompatActivity
                 fragment = new TransactionFragment();
                 fab.hide();
             }
+        } else if (id == R.id.navLogout) {
+            AuthUI.getInstance().signOut(this);
         }
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -264,6 +272,8 @@ public class MainActivity extends AppCompatActivity
     public void updateUi() {
         if (fragment instanceof TransactionFragment) {
             ((TransactionFragment) fragment).updateData();
+        } else if (fragment instanceof  DashboardFragment) {
+            ((DashboardFragment) fragment).updateTopCats();
         }
     }
 

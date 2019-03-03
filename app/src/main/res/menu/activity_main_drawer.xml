@@ -20,6 +20,9 @@
             android:id="@+id/navTransactions"
             android:icon="@drawable/ic_credit_card_black_24dp"
             android:title="Transactions" />
+        <item
+            android:id="@+id/navLogout"
+            android:title="Logout" />
     </group>
 
 

@@ -55,40 +55,10 @@ public class DashboardFragment extends Fragment {
         return rootView;
     }
 
-    private void updateTopCats() {
-        int[] index = new int[DataHandler.CATEGORIES.length];
-        for (int i = 0; i < DataHandler.CATEGORIES.length; i++) {
-            index[i] = i;
-        }
-        ArrayList<Double> values = new ArrayList<>();
-        for (int i = 0; i < DataHandler.CATEGORIES.length; i++) {
-            values.add(manager.getCategorySum(i));
-        }
+    protected void updateTopCats() {
+        lblCat1.setText(DataHandler.CATEGORIES[0]);
+        lblCat1Total.setText(String.valueOf(manager.getCategorySum(0)));
 
-        for (int i = 1; i < values.size(); ++i) {
-            double key = values.get(i);
-            int indexKey = index[i];
-            int j = i - 1;
-
-            /* Move elements of arr[0..i-1], that are
-               greater than key, to one position ahead
-               of their current position */
-            while (j >= 0 && values.get(j) > key) {
-                values.set((j + 1), values.get(j));
-                index[j + 1] = index[j];
-                j = j - 1;
-            }
-            values.set(j + 1, key);
-            index[j + 1] = indexKey;
-        }
-
-        double[] max = {index[0], index[1], index[2]};
-        lblCat1.setText(DataHandler.CATEGORIES[index[0]]);
-        lblCat2.setText(DataHandler.CATEGORIES[index[1]]);
-        lblCat3.setText(DataHandler.CATEGORIES[index[2]]);
-        lblCat1Total.setText(String.valueOf(max[0]));
-        lblCat2Total.setText(String.valueOf(max[0]));
-        lblCat3Total.setText(String.valueOf(max[0]));
     }
 
 }
