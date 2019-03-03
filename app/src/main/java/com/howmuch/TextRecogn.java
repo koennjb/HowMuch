@@ -20,6 +20,7 @@ import com.google.firebase.ml.vision.text.FirebaseVisionText;
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
 import com.google.firebase.ml.vision.text.RecognizedLanguage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -61,29 +62,29 @@ public class TextRecogn {
     }
 
     public void success(FirebaseVisionText result) {
-//        String resultText = result.getText();
         for (FirebaseVisionText.TextBlock block: result.getTextBlocks()) {
-//            String blockText = block.getText();
-//            Float blockConfidence = block.getConfidence();
-//            List<RecognizedLanguage> blockLanguages = block.getRecognizedLanguages();
-//            Point[] blockCornerPoints = block.getCornerPoints();
-//            Rect blockFrame = block.getBoundingBox();
             for (FirebaseVisionText.Line line: block.getLines()) {
-//                String lineText = line.getText();
-//                Float lineConfidence = line.getConfidence();
-//                List<RecognizedLanguage> lineLanguages = line.getRecognizedLanguages();
-//                Point[] lineCornerPoints = line.getCornerPoints();
-//                Rect lineFrame = line.getBoundingBox();
                 for (FirebaseVisionText.Element element: line.getElements()) {
                     String elementText = element.getText();
                     Log.d(TAG, elementText);
-//                    Float elementConfidence = element.getConfidence();
-//                    List<RecognizedLanguage> elementLanguages = element.getRecognizedLanguages();
-//                    Point[] elementCornerPoints = element.getCornerPoints();
-//                    Rect elementFrame = element.getBoundingBox();
                 }
             }
         }
+    }
+
+    private ArrayList<String> parseIntsAndFloats(String raw) {
+
+        ArrayList<String> listBuffer = new ArrayList<String>();
+
+        Pattern pattern = Pattern.compile("[+-]?[0-9]*[.]?[0-9]+");
+
+        Matcher m = p.matcher(raw);
+
+        while (m.find()) {
+            listBuffer.add(m.group());
+        }
+
+        return listBuffer;
     }
 
 
