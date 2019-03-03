@@ -32,10 +32,12 @@ public class TextRecogn {
     private final int TEXT_RECO_REQ_CODE = 100;
     private FirebaseVisionImage image;
     FirebaseVisionTextRecognizer detector;
+    private OnSuccessListener<FirebaseVisionText> listener;
     private final String TAG = "TextRec-Log";
 
-    public TextRecogn(Bitmap bitmap) {
+    public TextRecogn(Bitmap bitmap, OnSuccessListener<FirebaseVisionText> listener) {
         image = FirebaseVisionImage.fromBitmap(bitmap);
+        this.listener = listener;
         detector = FirebaseVision.getInstance()
                 .getOnDeviceTextRecognizer();
         processImage();
@@ -44,13 +46,7 @@ public class TextRecogn {
     public void processImage() {
         Task<FirebaseVisionText> result =
                 detector.processImage(image)
-                        .addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
-                            @Override
-                            public void onSuccess(FirebaseVisionText firebaseVisionText) {
-                                Log.d(TAG, "Success!!");
-                                success(firebaseVisionText);
-                            }
-                        })
+                        .addOnSuccessListener(listener)
                         .addOnFailureListener(
                                 new OnFailureListener() {
                                     @Override
@@ -60,33 +56,29 @@ public class TextRecogn {
                                 });
     }
 
-    public void success(FirebaseVisionText result) {
-        ArrayList<String> string = new ArrayList<>();
+    public ArrayList<String> success(FirebaseVisionText result) {
+//        ArrayList<String> string = new ArrayList<>();
 //        Log.d(TAG, result.getText());
+        ArrayList<String> results = new ArrayList<>();
         for (FirebaseVisionText.TextBlock block : result.getTextBlocks()) {
-            String blockText = block.getText();
-
-            Log.d(TAG, blockText);
-            for (FirebaseVisionText.Line line : block.getLines()) {
-                for (FirebaseVisionText.Element element : line.getElements()) {
-                    string.add(element.getText());
-                    //Log.d(TAG, element.getText());
-                }
-            }
+            results.addAll(parseIntsAndFloats(block.getText()));
         }
+        return results;
     }
 
     private ArrayList<String> parseIntsAndFloats(String raw) {
-        raw = "dsadsad 37676.89  dadsda  $944.8421";
         ArrayList<String> listBuffer = new ArrayList<String>();
 
         Pattern pattern = Pattern.compile("[+-]?[0-9]*[.]?[0-9]+");
+        //Pattern pattern = Pattern.compile("^\\d+\\.\\d{2}$");
 
         Matcher m = pattern.matcher(raw);
 
         while (m.find()) {
-            Log.d(TAG, m.group());
-            listBuffer.add(m.group());
+            if (m.group().matches("^\\d+\\.\\d{1,2}$")) {
+                listBuffer.add(m.group());
+            }
+
         }
 
         return listBuffer;

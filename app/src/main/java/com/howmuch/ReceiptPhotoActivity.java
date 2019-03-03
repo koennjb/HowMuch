@@ -13,17 +13,26 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.ml.vision.text.FirebaseVisionText;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
@@ -34,8 +43,11 @@ public class ReceiptPhotoActivity extends AppCompatActivity {
     private Bitmap imageBitmap;
     private String pictureImagePath = "";
     private boolean newPhoto;
+    private TextView lblReceiptTotal;
 
     private TextRecogn txtRec;
+
+    private ArrayList<String> results = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +58,8 @@ public class ReceiptPhotoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         newPhoto = false;
         dispatchTakePictureIntent();
+        lblReceiptTotal = findViewById(R.id.lblReceiptTotal);
+
     }
 
     public void ibtnPhotoOnClick(View view) {
@@ -127,7 +141,15 @@ public class ReceiptPhotoActivity extends AppCompatActivity {
                         default:
                             rotatedBitmap = imageBitmap;
                     }
-                    txtRec = new TextRecogn(rotatedBitmap);
+                    txtRec = new TextRecogn(rotatedBitmap, new OnSuccessListener<FirebaseVisionText>() {
+                        @Override
+                        public void onSuccess(FirebaseVisionText firebaseVisionText) {
+                            results = txtRec.success(firebaseVisionText);
+                            NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                            lblReceiptTotal.setText(formatter.format(findMax(results)));
+                            Log.d("MYLOG", results.toString());
+                        }
+                    });
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -139,6 +161,17 @@ public class ReceiptPhotoActivity extends AppCompatActivity {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    }
+
+    public double findMax(ArrayList<String> strings) {
+        double max = -1;
+        for (String str : strings) {
+            double current = Double.valueOf(str);
+            if (current > max) {
+                max = current;
+            }
+        }
+        return max;
     }
 }
 
