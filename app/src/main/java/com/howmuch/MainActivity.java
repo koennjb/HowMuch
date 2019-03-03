@@ -1,5 +1,7 @@
 package com.howmuch;
 
+import androidx.annotation.NonNull;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -8,6 +10,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.provider.MediaStore;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
@@ -26,6 +29,19 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.View;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+import com.google.firebase.ml.vision.document.FirebaseVisionCloudDocumentRecognizerOptions;
+import com.google.firebase.ml.vision.document.FirebaseVisionDocumentText;
+import com.google.firebase.ml.vision.document.FirebaseVisionDocumentTextRecognizer;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
@@ -66,11 +82,12 @@ public class MainActivity extends AppCompatActivity
     private String userId;
     List<AuthUI.IdpConfig> providers;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
 
         providers = Arrays.asList(new AuthUI.IdpConfig.EmailBuilder().build());
@@ -81,8 +98,8 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(MainActivity.this, ReceiptPhotoActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -104,7 +121,9 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        fragMain = findViewById(R.id.fragMain);
+        fragMain =
+
+                findViewById(R.id.fragMain);
 
         if (savedInstanceState != null) {
             //Restore the fragment's instance
@@ -197,18 +216,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-
-    }
-
-    public void updateUser() {
-
-    }
-
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -219,7 +226,7 @@ public class MainActivity extends AppCompatActivity
                 // Successfully signed in
                 FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
                 userId = fbUser.getUid();
-                updateUser();
+                loadData();
             } else {
                 signIn();
             }
@@ -270,3 +277,4 @@ public class MainActivity extends AppCompatActivity
 
     }
 }
+

@@ -45,6 +45,7 @@ public class AddTransactionActivity extends AppCompatActivity   implements DateP
         dayOfMonth = newDate.get(Calendar.DAY_OF_MONTH);
         datePicker = new DatePickerDialog(
                 this, AddTransactionActivity.this, year, monthOfYear, dayOfMonth);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         txtDate = findViewById(R.id.txtNewTransactionDate);
         txtDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
