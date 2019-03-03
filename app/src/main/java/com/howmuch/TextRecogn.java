@@ -34,7 +34,7 @@ public class TextRecogn {
     private final String TAG = "TextRec-Log";
 
     public TextRecogn() {
-        Log.d(TAG, "Bitmap is null: " +  (bitmap == null));
+        Log.d(TAG, "Bitmap is null: " + (bitmap == null));
         image = FirebaseVisionImage.fromBitmap(bitmap);
         detector = FirebaseVision.getInstance()
                 .getCloudTextRecognizer();
@@ -62,30 +62,31 @@ public class TextRecogn {
     }
 
     public void success(FirebaseVisionText result) {
-        for (FirebaseVisionText.TextBlock block: result.getTextBlocks()) {
-            for (FirebaseVisionText.Line line: block.getLines()) {
-                for (FirebaseVisionText.Element element: line.getElements()) {
-                    String elementText = element.getText();
-                    Log.d(TAG, elementText);
+        ArrayList<String> string = new ArrayList<>();
+        for (FirebaseVisionText.TextBlock block : result.getTextBlocks()) {
+            for (FirebaseVisionText.Line line : block.getLines()) {
+                for (FirebaseVisionText.Element element : line.getElements()) {
+                    string.add(element.getText());
+                    Log.d(TAG, element.getText());
                 }
             }
         }
     }
 
-    private ArrayList<String> parseIntsAndFloats(String raw) {
-
-        ArrayList<String> listBuffer = new ArrayList<String>();
-
-        Pattern pattern = Pattern.compile("[+-]?[0-9]*[.]?[0-9]+");
-
-        Matcher m = p.matcher(raw);
-
-        while (m.find()) {
-            listBuffer.add(m.group());
-        }
-
-        return listBuffer;
-    }
+//    private ArrayList<String> parseIntsAndFloats(ArrayList<String> rawList) {
+//
+//        ArrayList<String> listBuffer = new ArrayList<String>();
+//
+//        Pattern pattern = Pattern.compile("[+-]?[0-9]*[.]?[0-9]+");
+//
+//        Matcher m = p.matcher(raw);
+//
+//        while (m.find()) {
+//            listBuffer.add(m.group());
+//        }
+//
+//        return listBuffer;
+//    }
 
 
 //    public void textRecog(View view) {
@@ -130,7 +131,6 @@ public class TextRecogn {
 //
 //        return "";
 //    }
-
 
 
 }
