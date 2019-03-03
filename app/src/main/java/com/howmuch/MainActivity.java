@@ -28,6 +28,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+
     FrameLayout fragMain;
     Fragment fragment;
     FloatingActionButton fab;
