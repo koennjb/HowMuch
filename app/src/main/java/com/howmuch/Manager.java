@@ -23,8 +23,6 @@ public class Manager {
     private Manager() {
         dh = new DataHandler();
         firebaseDB = FirebaseFirestore.getInstance();
-        user = dh.getUser();
-        transactions = user.getTransactions();
     }
 
     public static Manager getManager() {
@@ -38,18 +36,23 @@ public class Manager {
 
     public void setUser(User u) {
         this.user = u;
+        setTransactions(u.getTransactions());
+    }
+
+    public void setTransactions(ArrayList<Transaction> list) {
+        transactions = list;
     }
 
     public void saveUser(User u) {
         dh.addUser(u);
     }
 
-    public void addTransaction(double total, String date, int category) {
-        Transaction t = new Transaction(total, date, category);
+    public void addTransaction(Transaction transaction) {
+        transactions.add(transaction);
     }
 
     public ArrayList<Transaction> allTransactions() {
-        return user.getTransactions();
+        return transactions;
     }
 
     public ArrayList<Transaction> getListOfCategory(int category) {
@@ -75,8 +78,7 @@ public class Manager {
     }
 
     public void loadUser(String id, OnCompleteListener<DocumentSnapshot> listener) {
-        DocumentReference docRef = firebaseDB.collection(DataHandler.USERS_COLLECTION_PATH).document(id);
-        docRef.get().addOnCompleteListener(listener);
+        dh.getUser(id, listener);
     }
 
 

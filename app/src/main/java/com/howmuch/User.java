@@ -17,6 +17,13 @@ public class User {
         this.transactions = transactions;
     }
 
+    public User(String email, String name, String id) {
+        this.email = email;
+        this.name = name;
+        this.id = id;
+        this.transactions = new ArrayList<Transaction>();
+    }
+
     public User() {
 
     }
