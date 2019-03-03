@@ -65,9 +65,9 @@ public class DataHandler {
         }
     }
 
-//    public String getTransactionId() {
-//        return
-//    }
+    public String getTransactionId(String userId) {
+        return db.collection(USERS_COLLECTION_PATH).document().getId();
+}
 
 
 }

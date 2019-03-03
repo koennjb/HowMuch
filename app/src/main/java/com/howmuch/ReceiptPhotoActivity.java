@@ -17,7 +17,11 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,7 +47,12 @@ public class ReceiptPhotoActivity extends AppCompatActivity {
     private Bitmap imageBitmap;
     private String pictureImagePath = "";
     private boolean newPhoto;
-    private TextView lblReceiptTotal;
+    private EditText txtReceiptPhotoTotal;
+    private EditText txtReceiptPhotoDescription;
+    private Button btnSave;
+    private Button btnRetake;
+    private Spinner spnCategories;
+    private Manager dm;
 
     private TextRecogn txtRec;
 
@@ -56,9 +65,23 @@ public class ReceiptPhotoActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        dm = Manager.getManager();
         newPhoto = false;
         dispatchTakePictureIntent();
-        lblReceiptTotal = findViewById(R.id.lblReceiptTotal);
+        txtReceiptPhotoTotal = findViewById(R.id.txtReceiptPhotoTotal);
+        txtReceiptPhotoDescription = findViewById(R.id.txtReceiptPhotoDescription);
+        btnRetake = findViewById(R.id.btnRetakePhoto);
+        btnRetake.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dispatchTakePictureIntent();
+            }
+        });
+        btnSave = findViewById(R.id.btnSaveTransaction);
+        spnCategories = findViewById(R.id.spnReceiptPhotoCategories);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, DataHandler.CATEGORIES);
+        spnCategories.setAdapter(adapter);
 
     }
 
@@ -145,8 +168,7 @@ public class ReceiptPhotoActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(FirebaseVisionText firebaseVisionText) {
                             results = txtRec.success(firebaseVisionText);
-                            NumberFormat formatter = NumberFormat.getCurrencyInstance();
-                            lblReceiptTotal.setText(formatter.format(findMax(results)));
+                            txtReceiptPhotoTotal.setText(String.valueOf(findMax(results)));
                             Log.d("MYLOG", results.toString());
                         }
                     });
@@ -172,6 +194,16 @@ public class ReceiptPhotoActivity extends AppCompatActivity {
             }
         }
         return max;
+    }
+
+    public void btnSaveOnClick(View view) {
+        Transaction transaction = new Transaction();
+        transaction.setDescription(txtReceiptPhotoDescription.getText().toString());
+        transaction.setTotal(Double.valueOf(txtReceiptPhotoTotal.getText().toString()));
+        transaction.setCategory(spnCategories.getSelectedItemPosition());
+        dm.addTransaction(transaction);
+        Toast.makeText(this, "Added transaction!", Toast.LENGTH_SHORT).show();
+        finish();
     }
 }
 
