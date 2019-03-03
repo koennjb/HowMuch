@@ -29,6 +29,10 @@ public class Manager {
         this.user = u;
     }
 
+    public void saveUser(User u) {
+        dh.addUser(u);
+    }
+
     public void addTransaction(double total, String date, int category) {
         Transaction t = new Transaction(total, date, category);
     }
