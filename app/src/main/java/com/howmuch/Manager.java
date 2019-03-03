@@ -48,6 +48,7 @@ public class Manager {
     }
 
     public void addTransaction(Transaction transaction) {
+        transaction.setId(dh.getTransactionId(user.getId()));
         transactions.add(transaction);
         user.setTransactions(transactions);
         dh.addUser(user);
@@ -65,6 +66,14 @@ public class Manager {
             }
         }
         return categoryList;
+    }
+
+    public double getCategorySum(int c) {
+        double total = 0;
+        for (Transaction trans : getListOfCategory(c)) {
+            total += trans.getTotal();
+        }
+        return total;
     }
 
     public void removeTransaction(String id) {
