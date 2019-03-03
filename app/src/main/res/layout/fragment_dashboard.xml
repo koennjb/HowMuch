@@ -41,6 +41,7 @@
                 android:contentDescription="TODO"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_directions_car_black_24dp"
                 tools:srcCompat="@drawable/ic_directions_car_black_24dp" />
 
             <TextView
@@ -87,9 +88,10 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:src="@drawable/ic_local_dining_black_24dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lblSecondCategoryName" />
+                app:layout_constraintTop_toBottomOf="@+id/lblSecondCategoryName"
+                app:srcCompat="@drawable/ic_local_dining_black_24dp"
+                tools:srcCompat="@drawable/ic_local_dining_black_24dp" />
 
             <TextView
                 android:id="@+id/lblSecondCategoryTotal"
@@ -151,9 +153,9 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:src="@drawable/ic_local_hospital_black_24dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lblThirdCategoryName" />
+                app:layout_constraintTop_toBottomOf="@+id/lblThirdCategoryName"
+                app:srcCompat="@drawable/ic_local_hospital_black_24dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

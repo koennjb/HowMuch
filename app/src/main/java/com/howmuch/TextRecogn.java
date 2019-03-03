@@ -29,14 +29,13 @@ public class TextRecogn {
 
     private final int TEXT_RECO_REQ_CODE = 100;
     private FirebaseVisionImage image;
-    Bitmap bitmap = BitmapFactory.decodeFile("/Users/koennbecker/Code/Mobile/HowMuch/app/libs/www_google_com-url.bmp");
     FirebaseVisionTextRecognizer detector;
     private final String TAG = "TextRec-Log";
 
     public TextRecogn(Bitmap bitmap) {
         image = FirebaseVisionImage.fromBitmap(bitmap);
         detector = FirebaseVision.getInstance()
-                .getCloudTextRecognizer();
+                .getOnDeviceTextRecognizer();
         processImage();
     }
 
@@ -61,11 +60,15 @@ public class TextRecogn {
 
     public void success(FirebaseVisionText result) {
         ArrayList<String> string = new ArrayList<>();
+//        Log.d(TAG, result.getText());
         for (FirebaseVisionText.TextBlock block : result.getTextBlocks()) {
+            String blockText = block.getText();
+
+            Log.d(TAG, blockText);
             for (FirebaseVisionText.Line line : block.getLines()) {
                 for (FirebaseVisionText.Element element : line.getElements()) {
                     string.add(element.getText());
-                    Log.d(TAG, element.getText());
+                    //Log.d(TAG, element.getText());
                 }
             }
         }
