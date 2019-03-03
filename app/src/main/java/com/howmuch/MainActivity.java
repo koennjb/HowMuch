@@ -31,6 +31,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -75,6 +77,9 @@ public class MainActivity extends AppCompatActivity
     FrameLayout fragMain;
     Fragment fragment;
     FloatingActionButton fab;
+//    private ImageView imgAvatar;
+    private View headerView;
+    private TextView lblName;
 
     private static final int RC_SIGN_IN = 4342;
     private Manager manager;
@@ -119,7 +124,11 @@ public class MainActivity extends AppCompatActivity
         }
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        headerView = navigationView.getHeaderView(0);
         navigationView.setNavigationItemSelectedListener(this);
+
+        lblName = headerView.findViewById(R.id.lblName);
+//        imgAvatar = headerView.findViewById(R.id.imgAvatar);
 
         fragMain =
 
@@ -140,6 +149,11 @@ public class MainActivity extends AppCompatActivity
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
         navigationView.getMenu().getItem(0).setChecked(true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -249,6 +263,7 @@ public class MainActivity extends AppCompatActivity
                         manager.setUser(task.getResult().toObject(User.class));
                         user = manager.getUser();
                         updateUi();
+                        lblName.setText(user.getName());
                     } else {
                         newUser();
                     }
