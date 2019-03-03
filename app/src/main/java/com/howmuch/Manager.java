@@ -47,8 +47,12 @@ public class Manager {
         return categoryList;
     }
 
-    public void editTransaction() {
-
+    public void removeTransaction(String id) {
+        for (int i = 0; i < transactions.size(); i++) {
+            if (transactions.get(i).getId().equals(id)) {
+                transactions.remove(i);
+            }
+        }
     }
 
 

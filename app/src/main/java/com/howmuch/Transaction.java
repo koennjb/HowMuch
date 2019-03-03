@@ -11,18 +11,22 @@ public class Transaction {
     private String category;
     private String id;
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getId() {
         return id;
     }
 
     public Transaction() {
+
     }
 
-    public Transaction(double total, String date, int category, String id) {
+    public Transaction(double total, String date, int category) {
         this.total = total;
         this.date = date;
         this.category = DataHandler.CATEGORIES[category];
-        this.id = id;
     }
 
     public double getTotal() {
