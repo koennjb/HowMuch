@@ -22,6 +22,8 @@ import com.google.firebase.ml.vision.text.RecognizedLanguage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import androidx.annotation.NonNull;
 
@@ -73,14 +75,15 @@ public class TextRecogn {
     }
 
     private ArrayList<String> parseIntsAndFloats(String raw) {
-
+        raw = "dsadsad 37676.89  dadsda  $944.8421";
         ArrayList<String> listBuffer = new ArrayList<String>();
 
         Pattern pattern = Pattern.compile("[+-]?[0-9]*[.]?[0-9]+");
 
-        Matcher m = p.matcher(raw);
+        Matcher m = pattern.matcher(raw);
 
         while (m.find()) {
+            Log.d(TAG, m.group());
             listBuffer.add(m.group());
         }
 
