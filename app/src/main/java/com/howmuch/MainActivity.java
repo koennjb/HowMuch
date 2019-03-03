@@ -1,6 +1,5 @@
 package com.howmuch;
 
-<<<<<<< HEAD
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -22,14 +21,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-=======
->>>>>>> eac8c2428651cbc02b7a169c8f845e0358b4b804
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-<<<<<<< HEAD
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
@@ -39,7 +35,7 @@ import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
-=======
+
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
@@ -49,8 +45,9 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
->>>>>>> eac8c2428651cbc02b7a169c8f845e0358b4b804
+import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -63,27 +60,20 @@ public class MainActivity extends AppCompatActivity
     Fragment fragment;
     FloatingActionButton fab;
 
-<<<<<<< HEAD
     private static final int RC_SIGN_IN = 4342;
     private Manager manager;
-    private List<AuthUI.IdpConfig> providers;
     private User user;
     private String userId;
-=======
-    private final static int REQUEST_IMAGE_CAPTURE = 100;
-    private ImageButton ibtnPhoto;
-    private String pictureImagePath = "";
-    private Bitmap imageBitmap;
-    private boolean newPhoto;
->>>>>>> eac8c2428651cbc02b7a169c8f845e0358b4b804
+    List<AuthUI.IdpConfig> providers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-<<<<<<< HEAD
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        manager = Manager.getManager();
 
         fab = (FloatingActionButton) findViewById(R.id.fabNewTransaction);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +91,13 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         auth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            userId = currentUser.getUid();
+            loadData();
+        } else {
+            signIn();
+        }
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -122,10 +119,6 @@ public class MainActivity extends AppCompatActivity
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
         navigationView.getMenu().getItem(0).setChecked(true);
-
-        providers = Arrays.asList(new AuthUI.IdpConfig.EmailBuilder().build());
-
-        manager = Manager.getManager();
     }
 
     @Override
@@ -177,11 +170,6 @@ public class MainActivity extends AppCompatActivity
             if (!(fragment instanceof DashboardFragment)) {
                 fragment = new DashboardFragment();
                 fab.show();
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.fragMain, fragment);
-                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                ft.addToBackStack(null);
-                ft.commit();
             }
         } else if (id == R.id.navAddTransaction) {
             Intent intent = new Intent(this, AddTransactionActivity.class);
@@ -192,14 +180,14 @@ public class MainActivity extends AppCompatActivity
             if (!(fragment instanceof TransactionFragment)) {
                 fragment = new TransactionFragment();
                 fab.hide();
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.fragMain, fragment);
-                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                ft.addToBackStack(null);
-                ft.commit();
             }
         }
 
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragMain, fragment);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.addToBackStack(null);
+        ft.commit();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -210,89 +198,16 @@ public class MainActivity extends AppCompatActivity
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null) {
-            userId = currentUser.getUid();
-            updateUser();
-        } else {
-            signIn();
-        }
+
     }
 
     public void updateUser() {
-        OnCompleteListener listener = new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    if (task.getResult().exists()) {
-                        manager.setUser(task.getResult().toObject(User.class));
-                        user = manager.getUser();
-                        loadData();
-                    } else {
-                        newUser();
-                    }
 
-                } else {
-                    signIn();
-                }
-            }
-        };
-        manager.loadUser(userId, listener);
-=======
-        ibtnPhoto = findViewById(R.id.ibtnPhoto);
     }
 
-    //Image Button ibtnPhoto Event Handler
-    public void ibtnPhotoOnClick(View view) {
-        dispatchTakePictureIntent();
-    }
-
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-                Toast.makeText(getApplicationContext(),
-                        "Cannot create a file to save image",
-                        Toast.LENGTH_LONG).show();
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.howmuch.android.fileprovider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-            }
-        }
-    }
-
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        pictureImagePath = image.getAbsolutePath();
-        return image;
->>>>>>> eac8c2428651cbc02b7a169c8f845e0358b4b804
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-<<<<<<< HEAD
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_SIGN_IN) {
@@ -305,23 +220,10 @@ public class MainActivity extends AppCompatActivity
                 updateUser();
             } else {
                 signIn();
-=======
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-//            Bundle extras = data.getExtras();
-//            imageBitmap = (Bitmap) extras.get("data");
-//            //set Bitmap into Image Button
-//            ibtnPhoto.setImageBitmap(imageBitmap);
-            File imgFile = new File(pictureImagePath);
-            if (imgFile.exists()) {
-                newPhoto = true;
-                imageBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                ibtnPhoto.setImageBitmap(imageBitmap);
->>>>>>> eac8c2428651cbc02b7a169c8f845e0358b4b804
             }
         }
     }
 
-<<<<<<< HEAD
     private void newUser() {
         FirebaseUser fbU = auth.getCurrentUser();
         User u = new User(fbU.getEmail(), fbU.getDisplayName(), fbU.getUid());
@@ -330,6 +232,27 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void loadData() {
+        OnCompleteListener listener = new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    if (task.getResult().exists()) {
+                        manager.setUser(task.getResult().toObject(User.class));
+                        user = manager.getUser();
+                        updateUi();
+                    } else {
+                        newUser();
+                    }
+
+                } else {
+                    signIn();
+                }
+            }
+        };
+        manager.loadUser(userId, listener);
+    }
+
+    public void updateUi() {
         if (fragment instanceof TransactionFragment) {
             ((TransactionFragment) fragment).updateData();
         }
@@ -344,10 +267,4 @@ public class MainActivity extends AppCompatActivity
                 RC_SIGN_IN);
 
     }
-
-=======
-    public void btnSaveOnClick(View view) {
-
-    }
->>>>>>> eac8c2428651cbc02b7a169c8f845e0358b4b804
 }

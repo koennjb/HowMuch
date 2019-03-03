@@ -48,6 +48,7 @@ public class TransactionFragment extends Fragment {
         itemAnimator.setAddDuration(200);
         itemAnimator.setRemoveDuration(200);
         recTransactions.setItemAnimator(itemAnimator);
+        updateData();
         return rootView;
     }
 

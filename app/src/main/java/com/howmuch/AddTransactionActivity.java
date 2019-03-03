@@ -10,15 +10,24 @@ import com.google.android.material.textfield.TextInputEditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.Toast;
 
-public class AddTransactionActivity extends AppCompatActivity {
+import java.util.Calendar;
+
+public class AddTransactionActivity extends AppCompatActivity   implements DatePickerDialog.OnDateSetListener{
 
     private int year;
     private int monthOfYear;
     private int dayOfMonth;
     private TextInputEditText txtDate;
+    private TextInputEditText txtTotal;
+    private TextInputEditText txtDescription;
+    private DatePickerDialog datePicker;
+
+    private Manager dm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,30 +35,62 @@ public class AddTransactionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_transaction);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        dm = Manager.getManager();
+
+        Calendar newDate = Calendar.getInstance();
+        year = newDate.get(Calendar.YEAR);
+        monthOfYear = newDate.get(Calendar.MONTH);
+        dayOfMonth = newDate.get(Calendar.DAY_OF_MONTH);
+        datePicker = new DatePickerDialog(
+                this, AddTransactionActivity.this, year, monthOfYear, dayOfMonth);
+
         txtDate = findViewById(R.id.txtNewTransactionDate);
+        txtDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) {
+                    datePicker.show();
+                }
+            }
+        });
+
+        txtTotal = findViewById(R.id.txtNewTransactionTotal);
+        txtDescription = findViewById(R.id.txtNewTransactionDescription);
     }
 
     public void btnNewTransactionCameraOnClick(View view) {
 
-
     }
 
-    public void txtDateOnClick(View view) {
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                new DatePickerDialog.OnDateSetListener() {
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        this.year = year;
+        this.monthOfYear = month;
+        this.dayOfMonth = dayOfMonth;
+        txtDate.setText(month +"/" +dayOfMonth + "/" + year);
+    }
 
-                    @Override
-                    public void onDateSet(DatePicker view, int year,
-                                          int monthOfYear, int dayOfMonth) {
+    public void btnAddTransactionOnClick(View view) {
+        Transaction transaction = new Transaction();
+        double total = 0.0;
+        if (txtTotal.getText().toString().trim().isEmpty()) {
+            txtTotal.setError("Please don't leave the total empty");
+            return;
+        } else {
+            total = Double.valueOf(txtTotal.getText().toString());
+        }
+        String description = txtDescription.getText().toString();
+        String date = txtDate.getText().toString();
 
-                        txtDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+        transaction.setDate(date);
+        transaction.setDescription(description);
+        transaction.setTotal(total);
 
-                    }
-                }, year, monthOfYear, dayOfMonth);
-        datePickerDialog.show();
+        dm.addTransaction(transaction);
+
+        Toast.makeText(this, "New transaction added!", Toast.LENGTH_LONG).show();
+        finish();
     }
 }

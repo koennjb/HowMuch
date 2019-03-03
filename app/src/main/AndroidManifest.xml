@@ -12,7 +12,6 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-<<<<<<< HEAD
         android:theme="@style/AppTheme">
         <activity
             android:name=".AddTransactionActivity"
@@ -23,14 +22,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.howmuch.MainActivity" />
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar">
-=======
-        android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.howmuch.android.fileprovider"
@@ -41,8 +32,8 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".MainActivity">
->>>>>>> eac8c2428651cbc02b7a169c8f845e0358b4b804
+        <activity android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

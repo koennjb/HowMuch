@@ -60,7 +60,7 @@ public class Manager {
     public ArrayList<Transaction> getListOfCategory(int category) {
         ArrayList<Transaction> categoryList = new ArrayList<>();
         for (Transaction trans : transactions) {
-            if (trans.getCategory().equals(dh.CATEGORIES[category])) {
+            if (trans.getCategory() == category) {
                 categoryList.add(trans);
             }
         }
