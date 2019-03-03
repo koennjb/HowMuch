@@ -1,5 +1,6 @@
 package com.howmuch;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class User {
@@ -7,13 +8,17 @@ public class User {
     private String email;
     private String name;
     private String id;
-    private Transaction[] transactions;
+    private ArrayList<Transaction> transactions;
 
-    public User(String email, String name, String id, Transaction[] transactions) {
+    public User(String email, String name, String id, ArrayList<Transaction> transactions) {
         this.email = email;
         this.name = name;
         this.id = id;
         this.transactions = transactions;
+    }
+
+    public User() {
+
     }
 
 //    public User(String email, String name, String id) {
@@ -22,12 +27,54 @@ public class User {
 //        this.id = id;
 //    }
 
-    public void newTransaction(double total, Date date, String category) {
+//    public void addTransaction(Transaction transaction) {
+//        transactions.add(transaction);
+//    }
+//
+//    public void getTransactions() {
+//
+//    }
 
+
+    public String getEmail() {
+        return email;
     }
 
-    public void getTransactions() {
-
+    public void setEmail(String email) {
+        this.email = email;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public ArrayList<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(ArrayList<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", id='" + id + '\'' +
+                ", transactions=" + transactions +
+                '}';
+    }
 }

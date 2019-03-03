@@ -1,0 +1,55 @@
+package com.howmuch;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
+public class Manager {
+
+    private ArrayList<Transaction> transactions;
+    private static Manager manager;
+    private DataHandler dh;
+    private User user;
+
+    private Manager() {
+        dh = new DataHandler();
+        user = dh.getUser();
+        transactions = user.getTransactions();
+    }
+
+    public static Manager getManager() {
+        if (manager == null) {
+            manager = new Manager();
+            return manager;
+        } else {
+            return manager;
+        }
+    }
+
+    public void setUser(User u) {
+        this.user = u;
+    }
+
+    public void addTransaction(double total, String date, int category) {
+        Transaction t = new Transaction(total, date, category);
+    }
+
+    public ArrayList<Transaction> allTransactions() {
+        return user.getTransactions();
+    }
+
+    public ArrayList<Transaction> getListOfCategory(int category) {
+        ArrayList<Transaction> categoryList = new ArrayList<>();
+        for (Transaction trans : transactions) {
+            if (trans.getCategory().equals(dh.CATEGORIES[category])) {
+                categoryList.add(trans);
+            }
+        }
+        return categoryList;
+    }
+
+    public void editTransaction() {
+
+    }
+
+
+}

@@ -9,12 +9,20 @@ public class Transaction {
     private double total;
     private String date;
     private String category;
+    private String id;
+
+    public String getId() {
+        return id;
+    }
 
     public Transaction() {
     }
 
-    public Transaction(double total, String date, int category) {
-
+    public Transaction(double total, String date, int category, String id) {
+        this.total = total;
+        this.date = date;
+        this.category = DataHandler.CATEGORIES[category];
+        this.id = id;
     }
 
     public double getTotal() {
