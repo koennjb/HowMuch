@@ -73,6 +73,8 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        providers = Arrays.asList(new AuthUI.IdpConfig.EmailBuilder().build());
+
         manager = Manager.getManager();
 
         fab = (FloatingActionButton) findViewById(R.id.fabNewTransaction);
