@@ -18,10 +18,10 @@ public class DataHandler {
     private String name = "Bob Smith";
     private String id = "xyz123";
 
-    private Transaction transaction1 = new Transaction(200.45, "03/01/2019", 0);
-    private Transaction transaction2 = new Transaction(55.54, "03/02/2019", 1);
-    private Transaction transaction3 = new Transaction(45, "03/03/2019", 0);
-    private Transaction transaction4 = new Transaction(707.99, "03/04/2019", 1);
+    private Transaction transaction1 = new Transaction("Pizza",200.45, "03/01/2019", 0);
+    private Transaction transaction2 = new Transaction("New shorts",55.54, "03/02/2019", 1);
+    private Transaction transaction3 = new Transaction("Test title",45, "03/03/2019", 0);
+    private Transaction transaction4 = new Transaction("IDEK anymore",707.99, "03/04/2019", 1);
     private ArrayList<Transaction> transactions;
 
     public DataHandler() {

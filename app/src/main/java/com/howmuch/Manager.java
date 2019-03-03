@@ -33,12 +33,12 @@ public class Manager {
         dh.addUser(u);
     }
 
-    public void addTransaction(double total, String date, int category) {
-        Transaction t = new Transaction(total, date, category);
+    public void addTransaction(Transaction transaction) {
+        transactions.add(transaction);
     }
 
     public ArrayList<Transaction> allTransactions() {
-        return user.getTransactions();
+        return transactions;
     }
 
     public ArrayList<Transaction> getListOfCategory(int category) {

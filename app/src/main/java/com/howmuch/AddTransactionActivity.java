@@ -35,6 +35,7 @@ public class AddTransactionActivity extends AppCompatActivity {
 
     public void btnNewTransactionCameraOnClick(View view) {
 
+
     }
 
     public void txtDateOnClick(View view) {

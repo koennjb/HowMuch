@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity
 
     FrameLayout fragMain;
     Fragment fragment;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabNewTransaction);
+        fab = (FloatingActionButton) findViewById(R.id.fabNewTransaction);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -121,7 +122,15 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.navBudgets) {
 
         } else if (id == R.id.navTransactions) {
-
+            if (!(fragment instanceof TransactionFragment)) {
+                fragment = new TransactionFragment();
+                fab.hide();
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.fragMain, fragment);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                ft.addToBackStack(null);
+                ft.commit();
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
