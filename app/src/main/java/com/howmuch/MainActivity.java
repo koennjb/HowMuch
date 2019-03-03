@@ -1,5 +1,6 @@
 package com.howmuch;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,17 +10,17 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+import com.google.firebase.ml.vision.document.FirebaseVisionCloudDocumentRecognizerOptions;
+import com.google.firebase.ml.vision.document.FirebaseVisionDocumentText;
+import com.google.firebase.ml.vision.document.FirebaseVisionDocumentTextRecognizer;
+
 public class MainActivity extends AppCompatActivity {
 
     private final int TEXT_RECO_REQ_CODE = 100;
-
-    private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
-    static {
-        ORIENTATIONS.append(Surface.ROTATION_0, 90);
-        ORIENTATIONS.append(Surface.ROTATION_90, 0);
-        ORIENTATIONS.append(Surface.ROTATION_180, 270);
-        ORIENTATIONS.append(Surface.ROTATION_270, 180);
-    }
 
     Manager manager;
 
@@ -36,6 +37,33 @@ public class MainActivity extends AppCompatActivity {
     public void textRecog(View view) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent,TEXT_RECO_REQ_CODE);
+
+
+
+        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
+        FirebaseVisionDocumentTextRecognizer detector = FirebaseVision.getInstance()
+                .getCloudDocumentTextRecognizer();
+
+        detector.processImage(image)
+                .addOnSuccessListener(new OnSuccessListener<FirebaseVisionDocumentText>() {
+                    @Override
+                    public void onSuccess(FirebaseVisionDocumentText result) {
+                        // Task completed successfully
+                        // ...
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Task failed with an exception
+                        // ...
+                    }
+                });
+
+
+
+
+
     }
 
     protected void onActivityResult (int requestCode, int resultCode, Intent data)
@@ -54,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    private void text
 
 
 }
