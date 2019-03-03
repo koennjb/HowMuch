@@ -26,6 +26,7 @@ public class DataHandler {
     public static final int OTHER = 5;
 
     public static final String USERS_COLLECTION_PATH = "users";
+    public static final String TRANSACTIONS_PATH = "transactions";
 
     private final String TAG = "DataHandler-Log";
 
