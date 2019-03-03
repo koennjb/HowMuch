@@ -48,6 +48,7 @@ public class Manager {
     }
 
     public void addTransaction(Transaction transaction) {
+        transaction.setId(dh.getTransactionId(user.getId()));
         transactions.add(transaction);
         user.setTransactions(transactions);
         dh.addUser(user);
