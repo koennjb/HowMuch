@@ -26,29 +26,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        manager = Manager.getManager();
-        User u = manager.getUser();
-        manager.saveUser(u);
+        new TextRecogn();
     }
 
-    protected void onActivityResult (int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode,resultCode,data);
-
-        if(requestCode==TEXT_RECO_REQ_CODE)
-        {
-            if(resultCode==RESULT_OK)
-            {
-                Bitmap photo= (Bitmap)data.getExtras().get("data");
-            }
-            else if(resultCode == RESULT_CANCELED)
-            {
-                Toast.makeText(this, "Failed to Capture", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private void text
 
 
 }
