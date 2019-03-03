@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-<<<<<<< HEAD
     private final int TEXT_RECO_REQ_CODE = 100;
 
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
@@ -22,9 +21,7 @@ public class MainActivity extends AppCompatActivity {
         ORIENTATIONS.append(Surface.ROTATION_270, 180);
     }
 
-=======
     Manager manager;
->>>>>>> master
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

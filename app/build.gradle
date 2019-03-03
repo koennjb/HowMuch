@@ -31,9 +31,4 @@ dependencies {
     implementation 'com.google.firebase:firebase-ml-vision:19.0.2'
 
 }
-<<<<<<< HEAD
-
 apply plugin: 'com.google.gms.google-services'
-=======
-apply plugin: 'com.google.gms.google-services'
->>>>>>> master
