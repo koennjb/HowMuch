@@ -67,6 +67,14 @@ public class Manager {
         return categoryList;
     }
 
+    public double getCategorySum(int c) {
+        double total = 0;
+        for (Transaction trans : getListOfCategory(c)) {
+            total += trans.getTotal();
+        }
+        return total;
+    }
+
     public void removeTransaction(String id) {
         for (int i = 0; i < transactions.size(); i++) {
             if (transactions.get(i).getId().equals(id)) {
